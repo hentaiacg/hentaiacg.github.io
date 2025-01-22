@@ -14,7 +14,7 @@
   .waves-svg1 {
     position: relative;
     bottom: 0;
-    z-index: 1; /* 波浪背景在内容后面 */
+    z-index: 100; /* 波浪背景在内容后面 */
     left: 0;
     width: 100%; /* 撑满宽度 */
     height: auto;
