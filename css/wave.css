@@ -10,6 +10,16 @@
     width: 100%;
     height: 5rem;
   }
+
+  .waves-svg1 {
+    position: absolute;
+    bottom: 0;
+    z-index: 1; /* 波浪背景在内容后面 */
+    left: 0;
+    width: 100%; /* 撑满宽度 */
+    height: auto;
+    fill: #007BFF; /* 波浪颜色 */
+  }
   /* Animation */
   
   .parallax > use {
