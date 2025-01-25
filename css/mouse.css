@@ -52,9 +52,9 @@ button:hover,.scroll-down-effects:hover {
 }
 /* 悬停非链接文本时的鼠标指针 */
 h1,h2,h3,h4,h5,h6,#subtitle,.content,.line,.post-content p,.post-content li{
-	cursor: url('./mouse/textselection.cur'), auto;
+	cursor: url('/mouse/textselection.cur'), auto;
 }
 /* 悬停文章日期 */
 .post-meta-date:hover,.post-meta-date-created:hover{
-	cursor: url('./mouse/commonselection.cur'), auto!important;
+	cursor: url('/mouse/commonselection.cur'), auto!important;
 }
