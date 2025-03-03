@@ -1,3 +1,8 @@
+.loading-img {
+  background: url(https://ff09945.webp.li/watch_neko.jpg) no-repeat center center;
+  background-size: cover;
+}
+
 .pace {
   -webkit-pointer-events: none;
   pointer-events: none;
@@ -62,9 +67,4 @@
   100% {
     background-position: 0% 50%;
   }
-}
-
-.loading-img {
-  background: url(https://ff09945.webp.li/watch_neko.jpg) no-repeat center center;
-  background-size: cover;
 }
