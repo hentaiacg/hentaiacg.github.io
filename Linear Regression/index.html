@@ -1,0 +1,374 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linear Regression | Rishinyan</title><meta name="author" content="Rishinyan,shinyanri@gmail.com"><meta name="copyright" content="Rishinyan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="线性回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Regression">
+<meta property="og:url" content="https://blog.rishinyan.top/Linear%20Regression/">
+<meta property="og:site_name" content="Rishinyan">
+<meta property="og:description" content="线性回归">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ff09945.webp.li/MorishimaHaruka_3.png">
+<meta property="article:published_time" content="2023-12-10T16:00:02.000Z">
+<meta property="article:modified_time" content="2024-11-29T06:25:29.000Z">
+<meta property="article:author" content="Rishinyan">
+<meta property="article:tag" content="监督学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ff09945.webp.li/MorishimaHaruka_3.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linear Regression",
+  "url": "https://blog.rishinyan.top/Linear%20Regression/",
+  "image": "https://ff09945.webp.li/MorishimaHaruka_3.png",
+  "datePublished": "2023-12-10T16:00:02.000Z",
+  "dateModified": "2024-11-29T06:25:29.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Rishinyan",
+      "url": "https://blog.rishinyan.top/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://ff09945.webp.li/watch_neko.jpg"><link rel="canonical" href="https://blog.rishinyan.top/Linear%20Regression/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//static.cloudflareinsights.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script defer="defer" data-pjax="data-pjax" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;50a7ba8f0875473cb18b83fd39f34467&quot;}"></script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Rishinyan","link":"链接: ","source":"来源: Rishinyan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'medium_zoom',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linear Regression',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/wave.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/progress_bar.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Rishinyan" type="application/atom+xml">
+</head><body><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><div class="loading-img"></div><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="/css/progress_bar.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://ff09945.webp.li/watch_neko.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Jeff/"><i class="fa-fw fas fa-female"></i><span> Jeff</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> CS</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/BigData/"><i class="fa-fw fas fa-database"></i><span> BigData</span></a></li><li><a class="site-page child" href="/MachineLearning/"><i class="fa-fw fas fa-microchip-ai"></i><span> MachineLearning</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://ff09945.webp.li/MorishimaHaruka_3.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"></a><a class="nav-page-title" href="/"><span class="site-name">Linear Regression</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Jeff/"><i class="fa-fw fas fa-female"></i><span> Jeff</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> CS</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/BigData/"><i class="fa-fw fas fa-database"></i><span> BigData</span></a></li><li><a class="site-page child" href="/MachineLearning/"><i class="fa-fw fas fa-microchip-ai"></i><span> MachineLearning</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Linear Regression</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-10T16:00:02.000Z" title="发表于 2023-12-11 00:00:02">2023-12-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-29T06:25:29.000Z" title="更新于 2024-11-29 14:25:29">2024-11-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><!-- display waves--><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2024-11-29 14:25:29&quot;}" hidden></div><h2 id="Terminology-术语"><a href="#Terminology-术语" class="headerlink" title="Terminology 术语"></a>Terminology 术语</h2><p>x = “input” variable (feature)</p>
+<p>y = “output” variable (“target” variable)</p>
+<p>$\hat{y}$= prediction (estimated y)</p>
+<p>m = number of training examples</p>
+<p>(x, y) = single training example</p>
+<p>$(x^{(i)},y^{(i)})$ =  $i^{th}$ training example. e.g. $(1^{st},2^{nd},3^{rd}…)$</p>
+<p>$w,b$: parameters, coefficients or weights</p>
+<h2 id="Process-流程"><a href="#Process-流程" class="headerlink" title="Process 流程"></a>Process 流程</h2><p>training set -&gt; learning algorithm -&gt; function</p>
+<p>x -&gt; module(function) -&gt; $\hat{y}$</p>
+<h2 id="Univariate-linear-regression-单变量线性回归"><a href="#Univariate-linear-regression-单变量线性回归" class="headerlink" title="Univariate linear regression 单变量线性回归"></a>Univariate linear regression 单变量线性回归</h2><p>$f_{w,b}(x)=wx+b$</p>
+<p>Linear regression with one variable(single feature x).<br>只有一个变量的线性回归</p>
+<h2 id="Cost-Function-squared-error-cost-function-损失函数"><a href="#Cost-Function-squared-error-cost-function-损失函数" class="headerlink" title="Cost Function(squared error cost function) 损失函数"></a>Cost Function(squared error cost function) 损失函数</h2><p>To measure how well a choice of w, and b fits the training data.<br>衡量选择的 w 和 b 对训练数据的拟合程度。</p>
+<p>$\hat{y}^{(i)}=f_{w,b}(x^{(i)})=wx^{(i)}+b$</p>
+<p>$J(w,b) = \frac1{2m}\sum<em>{i=1}^m({\hat{y}^{(i)}}-y^{(i)})^2= \frac1{2m}\sum</em>{i=1}^m(f_{w,b}(x^{(i)})-y^{(i)})^2$</p>
+<ul>
+<li><p>$f<em>{w,b}(x^{(i)})$ is our prediction for example $i$ using parameters $w,b$.<br>$f</em>{w,b}(x^{(i)})$ 是使用参数 $w,b$ 对第 $i$ 个实例的预测</p>
+</li>
+<li><p>$(f<em>{w,b}(x^{(i)}) -y^{(i)})^2$ is the squared difference between the target value and the prediction.<br>$(f</em>{w,b}(x^{(i)}) -y^{(i)})^2$ 是目标值与预测之间的平方差</p>
+</li>
+<li><p>These differences are summed over all the $m$ examples and divided by <code>2m</code> to produce the cost, $J(w,b)$.<br>这些差异在所有 $m$ 个实例上求和，并除以 <code>2m</code> 得到成本 $J(w,b)$</p>
+</li>
+</ul>
+<p>Find w,b: ${\hat{y}}^{(i)}$ is close to $y^{(i)}$ for all $(x^{(i)},y^{(i)}).$<br>所有数据中预测y接近真实y的w，b系数</p>
+<p>it measures the difference between the model’s predictions, and the actual true values for y.<br>它衡量了模型的预测与实际 y 的真实值之间的差异</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_cost</span>(<span class="params">x, y, w, b</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    计算线性回归的损失函数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      x (ndarray (m,)): 数据集， m个实例 </span></span><br><span class="line"><span class="string">      y (ndarray (m,)): 结果集</span></span><br><span class="line"><span class="string">      w,b (scalar)    : 模型参数  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">        total_cost (float): 使用w和b作为线性回归的参数来拟合x和y中的数据点的代价</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 实例个数</span></span><br><span class="line">    m = x.shape[<span class="number">0</span>] </span><br><span class="line"></span><br><span class="line">    cost_sum = <span class="number">0</span> </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m): </span><br><span class="line">        f_wb = w * x[i] + b   </span><br><span class="line">        cost = (f_wb - y[i]) ** <span class="number">2</span>  </span><br><span class="line">        cost_sum = cost_sum + cost  </span><br><span class="line">    total_cost = (<span class="number">1</span> / (<span class="number">2</span> * m)) * cost_sum  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> total_cost</span><br></pre></td></tr></table></figure>
+<h2 id="Gradient-descent-algorithm-梯度下降算法"><a href="#Gradient-descent-algorithm-梯度下降算法" class="headerlink" title="Gradient descent algorithm 梯度下降算法"></a>Gradient descent algorithm 梯度下降算法</h2><ul>
+<li><p>Start with some w, b<br>从一些初始的 w,b 开始</p>
+</li>
+<li><p>Keep changing w,b ܾ to reduce J(w, b)<br>不断调整 w,b 以减小 J(w,b)</p>
+</li>
+<li><p>Until we settle at or near a minimum<br>直到我们稳定在或接近一个区域最小值</p>
+</li>
+</ul>
+<h3 id="implementing-实现"><a href="#implementing-实现" class="headerlink" title="implementing 实现"></a>implementing 实现</h3><p>$\begin{cases} w &amp;= w - \alpha \frac{\partial J(w,b)}{\partial w} \ b &amp;= b - \alpha \frac{\partial J(w,b)}{\partial b} \end{cases}$</p>
+<p>$\alpha$ is learning rate,  $\frac{\partial J(w,b)}{\partial w}<br>$ is derivative<br>$\alpha$是学习率, $\frac{\partial J(w,b)}{\partial w}$是偏导数</p>
+<p>Near a local minimum<br>局部最小值附近</p>
+<ul>
+<li><p>Derivative becomes smaller<br>导数变小</p>
+</li>
+<li><p>Update steps become smaller<br>更新步长变小</p>
+</li>
+</ul>
+<p>repeat until convergence, where, parameters 𝑤, 𝑏 are updated simultaneously.<br>重复直到收敛，其中，参数𝑤, 𝑏同时更新。</p>
+<p>Linear regression model: $f_{w,b}(x^{(i)}) = wx^{(i)} + b$</p>
+<p>Cost function: $J(w,b) = \frac{1}{2m} \sum\limits<em>{i = 0}^{m-1} (f</em>{w,b}(x^{(i)}) - y^{(i)})^2$</p>
+<p>$\frac{\partial J(w,b)}{\partial w} =\frac{1}{m} \sum\limits<em>{i = 0}^{m-1} (f</em>{w,b}(x^{(i)}) - y^{(i)})x^{(i)}$</p>
+<p>$\frac{\partial J(w,b)}{\partial b} = \frac{1}{m} \sum\limits<em>{i = 0}^{m-1} (f</em>{w,b}(x^{(i)}) - y^{(i)})$ </p>
+<p>Here simultaniously means that you calculate the partial derivatives for all the parameters before updating any of the parameters.<br>这里的 “同时” 意味着在更新任何参数之前，同时计算所有参数的偏导数。</p>
+<p><code>compute_gradient</code>  returns $\frac{\partial J(w,b)}{\partial w}$,$\frac{\partial J(w,b)}{\partial b}$. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_gradient</span>(<span class="params">x, y, w, b</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    计算线性回归的梯度</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      x (ndarray (m,)): 数据集， m个实例 </span></span><br><span class="line"><span class="string">      y (ndarray (m,)): 结果集</span></span><br><span class="line"><span class="string">      w,b (scalar)    : 模型参数  </span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">      dj_dw (scalar): cost相对于参数w的梯度</span></span><br><span class="line"><span class="string">      dj_db (scalar): cost相对于参数b的梯度      </span></span><br><span class="line"><span class="string">     &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实例个数</span></span><br><span class="line">    m = x.shape[<span class="number">0</span>]    </span><br><span class="line">    dj_dw = <span class="number">0</span></span><br><span class="line">    dj_db = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):  </span><br><span class="line">        f_wb = w * x[i] + b </span><br><span class="line">        dj_dw_i = (f_wb - y[i]) * x[i] </span><br><span class="line">        dj_db_i = f_wb - y[i] </span><br><span class="line">        dj_db += dj_db_i</span><br><span class="line">        dj_dw += dj_dw_i </span><br><span class="line">    dj_dw = dj_dw / m </span><br><span class="line">    dj_db = dj_db / m </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dj_dw, dj_db</span><br></pre></td></tr></table></figure>
+<p>Below <code>gradient_descent</code>, you will utilize this function to find optimal values of $w$ and $b$ on the training data.</p>
+<p>$\begin{cases} w &amp;= w - \alpha \frac{\partial J(w,b)}{\partial w} \ b &amp;= b - \alpha \frac{\partial J(w,b)}{\partial b} \end{cases}$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">gradient_descent</span>(<span class="params">x, y, w_in, b_in, alpha, num_iters, gradient_function, num_iters</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    执行梯度下降来拟合参数 w 和 b。通过采取学习率 alpha 进行 num_iters 次梯度步骤来更新 w 和 b</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      x (ndarray (m,))  : 数据集， m个实例  </span></span><br><span class="line"><span class="string">      y (ndarray (m,))  : 结果集</span></span><br><span class="line"><span class="string">      w_in,b_in (scalar): 模型参数的初始值  </span></span><br><span class="line"><span class="string">      alpha (float):     学习率</span></span><br><span class="line"><span class="string">      num_iters (int):   运行梯度下降的迭代次数</span></span><br><span class="line"><span class="string">      gradient_function: 调用该函数生成gradient</span></span><br><span class="line"><span class="string">      num_iters (int)     : 运行梯度下降的迭代次数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">      w (scalar): 在运行梯度下降后更新的参数值</span></span><br><span class="line"><span class="string">      b (scalar): 在运行梯度下降后更新的参数值</span></span><br><span class="line"><span class="string">      &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    b = b_in</span><br><span class="line">    w = w_in</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_iters):</span><br><span class="line">        <span class="comment"># 计算梯度并使用gradient_function更新参数</span></span><br><span class="line">        dj_dw, dj_db = gradient_function(x, y, w , b)     </span><br><span class="line"></span><br><span class="line">        <span class="comment"># 更新参数</span></span><br><span class="line">        b = b - alpha * dj_db                            </span><br><span class="line">        w = w - alpha * dj_dw                            </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> w, b</span><br></pre></td></tr></table></figure>
+<h2 id="Multiple-Linear-Regression-多元线性回归"><a href="#Multiple-Linear-Regression-多元线性回归" class="headerlink" title="Multiple Linear Regression 多元线性回归"></a>Multiple Linear Regression 多元线性回归</h2><h3 id="Terminology"><a href="#Terminology" class="headerlink" title="Terminology"></a>Terminology</h3><p>$x_j=j^{th}$ feature</p>
+<p>n = number of features</p>
+<p>$\vec{x}^{(i)}$ = features of $i^{th}$  training example</p>
+<p>$\vec{x}^{(i)}_j$= value of feature j in $i^{th}$ training example</p>
+<h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><p>$f_{\vec{w},b}(\vec{x})= \vec{w} \cdot \vec{x} + b= w_1x_1+w_2x_2+w_3x_3+···+w_nx_n+b$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">predict_single_loop</span>(<span class="params">x, w, b</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    使用线性回归进行单一预测on</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      x (ndarray): Shape (n,) 带有多特征的例子</span></span><br><span class="line"><span class="string">      w (ndarray): Shape (n,) 模型参数    </span></span><br><span class="line"><span class="string">      b (scalar):  模型参数   </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">      p (scalar):  预测值</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    n = x.shape[<span class="number">0</span>]</span><br><span class="line">    p = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        p_i = x[i] * w[i]  </span><br><span class="line">        p = p + p_i         </span><br><span class="line">    p = p + b                </span><br><span class="line">    <span class="keyword">return</span> p</span><br><span class="line"></span><br><span class="line"><span class="comment"># We can make use of vector operations to speed up predictions.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">predict</span>(<span class="params">x, w, b</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    使用线性回归进行单一预测on</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      x (ndarray): Shape (n,) 带有多特征的例子</span></span><br><span class="line"><span class="string">      w (ndarray): Shape (n,) 模型参数    </span></span><br><span class="line"><span class="string">      b (scalar):  模型参数   </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">      p (scalar):  预测值rediction</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    p = np.dot(x, w) + b     </span><br><span class="line">    <span class="keyword">return</span> p</span><br></pre></td></tr></table></figure>
+<h3 id="Cost-With-Multiple-Variables"><a href="#Cost-With-Multiple-Variables" class="headerlink" title="Cost With Multiple Variables"></a>Cost With Multiple Variables</h3><p>$J(\vec{w},b) = \frac{1}{2m} \sum\limits<em>{i = 1}^{m} (f</em>{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)})^2$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_cost</span>(<span class="params">X, y, w, b</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    计算损失</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      X (ndarray (m,n)): Data, m个实例n个特征</span></span><br><span class="line"><span class="string">      y (ndarray (m,)) : 目标值</span></span><br><span class="line"><span class="string">      w (ndarray (n,)) : 模型参数</span></span><br><span class="line"><span class="string">      b (scalar)       : 模型参数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">      cost (scalar): 损失值</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    m = X.shape[<span class="number">0</span>]</span><br><span class="line">    cost = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):                                </span><br><span class="line">        f_wb_i = np.dot(X[i], w) + b           <span class="comment">#(n,)(n,) = scalar (see np.dot)</span></span><br><span class="line">        cost = cost + (f_wb_i - y[i])**<span class="number">2</span>       <span class="comment">#scalar</span></span><br><span class="line">    cost = cost / (<span class="number">2</span> * m)                      <span class="comment">#scalar    </span></span><br><span class="line">    <span class="keyword">return</span> cost</span><br></pre></td></tr></table></figure>
+<h3 id="Gradient-descent"><a href="#Gradient-descent" class="headerlink" title="Gradient descent"></a>Gradient descent</h3><p>$w_j=w_j-\alpha\frac{\partial J(\vec{w},b)}{\partial{w_j}}$</p>
+<p>$b=b-\alpha\frac{\partial{J(\vec{w},b)}}{\partial{b}}$</p>
+<p>$\begin{cases}w<em>1=w_1-\alpha\frac{1}{m} \sum\limits</em>{i = 1}^{m} (f<em>{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)})x_1^{(i)}\ .\ .\ .\ w_n=w_n-\alpha\frac{1}{m} \sum\limits</em>{i = 1}^{m} (f<em>{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)})x_n^{(i)}\ b=b-\alpha\frac{1}{m} \sum\limits</em>{i = 1}^{m} (f_{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)})\end{cases}$</p>
+<p>n &gt;= 2, and simultaneously update $w_j$(for j = 1,…,n) and b</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_gradient</span>(<span class="params">X, y, w, b</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    计算线性回归的梯度</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      X (ndarray (m,n)): Data, m个实例n个特征</span></span><br><span class="line"><span class="string">      y (ndarray (m,)) : 目标值</span></span><br><span class="line"><span class="string">      w (ndarray (n,)) : 模型参数  </span></span><br><span class="line"><span class="string">      b (scalar)       : 模型参数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">      dj_dw (ndarray (n,)): 对于参数 w 的cost函数梯度 </span></span><br><span class="line"><span class="string">      dj_db (scalar):       对于参数 b 的cost函数梯度 </span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    m,n = X.shape           <span class="comment">#(number of examples, number of features)</span></span><br><span class="line">    dj_dw = np.zeros((n,))</span><br><span class="line">    dj_db = <span class="number">0.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):                             </span><br><span class="line">        err = (np.dot(X[i], w) + b) - y[i]   </span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):                         </span><br><span class="line">            dj_dw[j] = dj_dw[j] + err * X[i, j]    </span><br><span class="line">        dj_db = dj_db + err                        </span><br><span class="line">    dj_dw = dj_dw / m                                </span><br><span class="line">    dj_db = dj_db / m                                </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dj_db, dj_dw</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gradient_descent</span>(<span class="params">X, y, w_in, b_in, cost_function, gradient_function, alpha, num_iters</span>): </span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    执行批量梯度下降以学习 w 和 b。通过采取 num_iters 步长为 learning rate 的梯度步骤来更新 w 和 b</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">      X (ndarray (m,n))   : Data, m个实例n个特征</span></span><br><span class="line"><span class="string">      y (ndarray (m,))    : 目标值</span></span><br><span class="line"><span class="string">      w_in (ndarray (n,)) : 初始模型参数</span></span><br><span class="line"><span class="string">      b_in (scalar)       : 初始模型参数</span></span><br><span class="line"><span class="string">      cost_function       : 计算cost的函数</span></span><br><span class="line"><span class="string">      gradient_function   : 计算梯度的函数</span></span><br><span class="line"><span class="string">      alpha (float)       : 学习率</span></span><br><span class="line"><span class="string">      num_iters (int)     : 运行梯度下降的迭代次数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">      w (ndarray (n,)) : 更新后的参数结果 </span></span><br><span class="line"><span class="string">      b (scalar)       : 更新后的参数结果</span></span><br><span class="line"><span class="string">      &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    w = copy.deepcopy(w_in)  <span class="comment">#在函数内部避免修改全局变量 w</span></span><br><span class="line">    b = b_in</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_iters):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算梯度并更新参数</span></span><br><span class="line">        dj_db,dj_dw = gradient_function(X, y, w, b)   <span class="comment">##None</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 更新参数使用 w, b, alpha and gradient</span></span><br><span class="line">        w = w - alpha * dj_dw               <span class="comment">##None</span></span><br><span class="line">        b = b - alpha * dj_db               <span class="comment">##None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> w, b <span class="comment"># 返回最终 w,b</span></span><br></pre></td></tr></table></figure>
+<h2 id="Normal-equation-正规方程"><a href="#Normal-equation-正规方程" class="headerlink" title="Normal equation 正规方程"></a>Normal equation 正规方程</h2><ul>
+<li>only for linear regression</li>
+<li>solve for w,b without iterations</li>
+</ul>
+<p>Disadvantage:</p>
+<ul>
+<li>dosen’t generalize to other learning algorithms</li>
+<li>slow when number of features is large (&gt; 10000)</li>
+</ul>
+<h2 id="Feature-scaling-特征缩放"><a href="#Feature-scaling-特征缩放" class="headerlink" title="Feature scaling 特征缩放"></a>Feature scaling 特征缩放</h2><p>Feature scaling, essentially dividing each positive feature by its maximum value, or more generally, rescale each feature by both its minimum and maximum values using (x-min)/(max-min).</p>
+<p>aim for about -1 &lt;= $x_j$ &lt;= 1 for each feature $x_j$</p>
+<h3 id="Mean-normalization-均值归一化"><a href="#Mean-normalization-均值归一化" class="headerlink" title="Mean normalization 均值归一化"></a>Mean normalization 均值归一化</h3><p>$x_i := \dfrac{x_i - \mu_i}{max - min}$ </p>
+<h3 id="Z-score-normalization-Z-score归一化"><a href="#Z-score-normalization-Z-score归一化" class="headerlink" title="Z-score normalization Z-score归一化"></a>Z-score normalization Z-score归一化</h3><p>After z-score normalization, all features will have a mean of 0 and a standard deviation of 1.</p>
+<p>$x^{(i)}_j = \dfrac{x^{(i)}_j - \mu_j}{\sigma_j} \tag{4}$ </p>
+<p>where $j$ selects a feature or a column in the $\mathbf{X}$ matrix. $µ_j$ is the mean of all the values for feature (j) and $\sigma_j$ is the standard deviation of feature (j).</p>
+<p><strong>Implementation Note:</strong> When normalizing the features, it is important to store the values used for normalization - the mean value and the standard deviation used for the computations. </p>
+<p>Given a new x value, we must first normalize x using the mean and standard deviation that we had previously computed from the training set.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.rishinyan.top">Rishinyan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.rishinyan.top/Linear%20Regression/">https://blog.rishinyan.top/Linear%20Regression/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.rishinyan.top" target="_blank">Rishinyan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/">监督学习</a></div><div class="post-share"><div class="social-share" data-image="https://ff09945.webp.li/MorishimaHaruka_3.png" data-sites="twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://ff09945.webp.li/watch_neko.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Rishinyan</div><div class="author-info-description">Rishinyan's Blog</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/hentaiacg" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:shinyanri@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title=""><i class="fas fa-rss"></i></a><a class="social-icon" href="https://weibo.com/u/3219469802" target="_blank" title="Weibo"><i class="fab fa-weibo" style="color: #d70f0f;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Terminology-%E6%9C%AF%E8%AF%AD"><span class="toc-number">1.</span> <span class="toc-text">Terminology 术语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Process-%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">Process 流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Univariate-linear-regression-%E5%8D%95%E5%8F%98%E9%87%8F%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-number">3.</span> <span class="toc-text">Univariate linear regression 单变量线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cost-Function-squared-error-cost-function-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">Cost Function(squared error cost function) 损失函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient-descent-algorithm-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%AE%97%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">Gradient descent algorithm 梯度下降算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#implementing-%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.1.</span> <span class="toc-text">implementing 实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Multiple-Linear-Regression-%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-number">6.</span> <span class="toc-text">Multiple Linear Regression 多元线性回归</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Terminology"><span class="toc-number">6.1.</span> <span class="toc-text">Terminology</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model"><span class="toc-number">6.2.</span> <span class="toc-text">Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cost-With-Multiple-Variables"><span class="toc-number">6.3.</span> <span class="toc-text">Cost With Multiple Variables</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gradient-descent"><span class="toc-number">6.4.</span> <span class="toc-text">Gradient descent</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Normal-equation-%E6%AD%A3%E8%A7%84%E6%96%B9%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">Normal equation 正规方程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feature-scaling-%E7%89%B9%E5%BE%81%E7%BC%A9%E6%94%BE"><span class="toc-number">8.</span> <span class="toc-text">Feature scaling 特征缩放</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mean-normalization-%E5%9D%87%E5%80%BC%E5%BD%92%E4%B8%80%E5%8C%96"><span class="toc-number">8.1.</span> <span class="toc-text">Mean normalization 均值归一化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Z-score-normalization-Z-score%E5%BD%92%E4%B8%80%E5%8C%96"><span class="toc-number">8.2.</span> <span class="toc-text">Z-score normalization Z-score归一化</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Jeff'sPlaylist/" title="Jeff's Playlist"><img src="https://ff09945.webp.li/MorishimaHaruka_3.png" onerror="this.onerror=null;this.src='https://ff09945.webp.li/MorishimaHaruka_2.png'" alt="Jeff's Playlist"/></a><div class="content"><a class="title" href="/Jeff'sPlaylist/" title="Jeff's Playlist">Jeff's Playlist</a><time datetime="2025-01-11T07:30:00.000Z" title="发表于 2025-01-11 15:30:00">2025-01-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/CentosCompliesHadoop/" title="Centos7.9 编译 Hadoop3.4.0"><img src="https://ff09945.webp.li/MorishimaHaruka_3.png" onerror="this.onerror=null;this.src='https://ff09945.webp.li/MorishimaHaruka_2.png'" alt="Centos7.9 编译 Hadoop3.4.0"/></a><div class="content"><a class="title" href="/CentosCompliesHadoop/" title="Centos7.9 编译 Hadoop3.4.0">Centos7.9 编译 Hadoop3.4.0</a><time datetime="2024-07-18T10:33:00.000Z" title="发表于 2024-07-18 18:33:00">2024-07-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Linear%20Regression/" title="Linear Regression"><img src="https://ff09945.webp.li/MorishimaHaruka_3.png" onerror="this.onerror=null;this.src='https://ff09945.webp.li/MorishimaHaruka_2.png'" alt="Linear Regression"/></a><div class="content"><a class="title" href="/Linear%20Regression/" title="Linear Regression">Linear Regression</a><time datetime="2023-12-10T16:00:02.000Z" title="发表于 2023-12-11 00:00:02">2023-12-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Jupyter%20Notebook%20%E5%AE%89%E8%A3%85/" title="Jupyter Notebook 安装"><img src="https://ff09945.webp.li/MorishimaHaruka_3.png" onerror="this.onerror=null;this.src='https://ff09945.webp.li/MorishimaHaruka_2.png'" alt="Jupyter Notebook 安装"/></a><div class="content"><a class="title" href="/Jupyter%20Notebook%20%E5%AE%89%E8%A3%85/" title="Jupyter Notebook 安装">Jupyter Notebook 安装</a><time datetime="2023-12-10T16:00:01.000Z" title="发表于 2023-12-11 00:00:01">2023-12-11</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><!-- display waves--><section class="main-hero-waves-area waves-area"></section><svg class="waves-svg1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 150 40" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M 0 30 Q 25 15, 50 30 T 100 30 T 150 30 V 50 H 0 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liLi5I2iIluEap7Y',
+      clientSecret: '51f16c78325c36c02732e0455ab59c8e6537791c',
+      repo: 'hentaiacg.github.io',
+      owner: 'hentaiacg',
+      admin: ['hentaiacg'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '06fb4756a630ffa79b34b641a9cd18d5'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !false) {
+    if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
